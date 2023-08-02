@@ -17,18 +17,7 @@ app.use(bodyParser.json());
 
 app.get("/", function(req, res){
   
-  res.render('index', function(err){
-    const options = {
-      settings: settingsBill.getSettings(),
-      totals: settingsBill.totals()
-    }
-    if (err) {
-      console.error('Error rendering view:', err);
-      return res.status(500).send('Internal Server Error');
-    }
-
-    res.send(options)
-  });
+  res.render('index', {updateSettings: settingsBill.getSettings(), totals: settingsBill.totals()});
 });
 
 app.post('/settings', function(req, res){
@@ -51,11 +40,12 @@ app.post('/action', function(req, res){
 });
 
 app.get('/actions', function(req, res){
-
+  res.render('actions', {actions: settingsBill.actions()});
 });
 
-app.get('/actions/:type', function(req, res){
-
+app.get('/actions/:actionType', function(req, res){
+  const actionType = req.params.actionType;
+  res.render('actions', {actions: settingsBill.actionsFor(actionType)});
 });
 
 
