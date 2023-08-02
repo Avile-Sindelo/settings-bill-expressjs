@@ -27,8 +27,7 @@ app.post('/settings', function(req, res){
     warningLevel: req.body.warningLevel,
     criticalLevel: req.body.criticalLevel
   });
-
-  console.log(settingsBill.getSettings()); 
+ 
   res.redirect('/');
 });
 
