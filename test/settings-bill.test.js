@@ -2,7 +2,7 @@ import assert from 'assert';
 import settingsBill from '../settings-bill-factory.js';
 
 describe('Testing the factory function of the settings-bill', function(){
-    it('should test if the function can take the cost settings and record them well', function(){
+    it('should test if the function allows you to set the settings of the widget', function(){
         let bills = settingsBill();
 
         let settingsObject1 = {

@@ -2,6 +2,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { engine } from 'express-handlebars';
 import SettingsBill from './settings-bill-factory.js';
+
 // var exphbs = require('express-handlebars')
 //let express = require('express');
 let app = express();
@@ -17,7 +18,7 @@ app.use(bodyParser.json());
 
 app.get("/", function(req, res){
   
-  res.render('index', {updateSettings: settingsBill.getSettings(), totals: settingsBill.totals()});
+  res.render('index', {updateSettings: settingsBill.getSettings(), totals: settingsBill.totals(), totalClass: settingsBill.getTotalClass()});
 });
 
 app.post('/settings', function(req, res){
@@ -27,15 +28,15 @@ app.post('/settings', function(req, res){
     warningLevel: req.body.warningLevel,
     criticalLevel: req.body.criticalLevel
   });
- 
+  
+ console.log(settingsBill.getTotalClass());
   res.redirect('/');
 });
 
 app.post('/action', function(req, res){
-  //capture the data
   settingsBill.recordAction(req.body.actionType);
 
-  res.redirect('/');
+  res.redirect('/'); 
 });
 
 app.get('/actions', function(req, res){
@@ -48,9 +49,8 @@ app.get('/actions/:actionType', function(req, res){
 });
 
 
-
 let PORT = process.env.PORT || 3007;
 
 app.listen(PORT, function(){
-  console.log('App started on port :', PORT);
+  console.log('Server started on port :', PORT);
 });

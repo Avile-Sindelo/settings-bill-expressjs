@@ -1,9 +1,12 @@
+import moment from 'moment/moment.js';
+
 export default function SettingsBill() {
 
     let smsCost;
     let callCost;
     let warningLevel;
     let criticalLevel; 
+    let totalClass = 'totalSettings';
 
     let actionList = [];
 
@@ -25,20 +28,30 @@ export default function SettingsBill() {
     }
 
     function recordAction(action) {
+        //Make sure you can't record a new action if the total is greater than or equal to the critical level
+        if(!hasReachedCriticalLevel()){
+            let cost = 0;
+            if (action === 'sms'){
+                cost = smsCost;
+            }
+            else if (action === 'call'){
+                cost = callCost;
+            }
 
-        let cost = 0;
-        if (action === 'sms'){
-            cost = smsCost;
-        }
-        else if (action === 'call'){
-            cost = callCost;
-        }
+            actionList.push({
+                type: action,
+                cost,
+                timestamp: moment(new Date().toLocaleString()).fromNow()
+            });
 
-        actionList.push({
-            type: action,
-            cost,
-            timestamp: new Date()
-        });
+            //Handle the warning level class
+            if(hasReachedWarningLevel()){
+                totalClass = 'warning';
+            } else if(hasReachedCriticalLevel()){
+                //Handle the critical level class  
+                totalClass = 'danger';
+            }
+        }  
     }
 
     function actions(){
@@ -89,12 +102,12 @@ export default function SettingsBill() {
     }
 
     function totals() {
-        let smsTotal = getTotal('sms')
-        let callTotal = getTotal('call')
+        let smsTotal = getTotal('sms').toFixed(2)
+        let callTotal = getTotal('call').toFixed(2)
         return {
             smsTotal,
             callTotal,
-            grandTotal : grandTotal()
+            grandTotal : grandTotal().toFixed(2)
         }
     }
 
@@ -111,6 +124,10 @@ export default function SettingsBill() {
         return total >= criticalLevel;
     }
 
+    function getTotalClass(){
+        return totalClass; 
+    }
+
     return {
         setSettings,
         getSettings,
@@ -119,6 +136,7 @@ export default function SettingsBill() {
         actionsFor,
         totals,
         hasReachedWarningLevel,
-        hasReachedCriticalLevel
+        hasReachedCriticalLevel,
+        getTotalClass
     }
 }
