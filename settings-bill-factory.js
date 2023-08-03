@@ -41,7 +41,7 @@ export default function SettingsBill() {
             actionList.push({
                 type: action,
                 cost,
-                timestamp: moment(new Date().toLocaleString()).fromNow()
+                timestamp: moment().fromNow(new Date().toLocaleString())
             });
 
             //Handle the warning level class

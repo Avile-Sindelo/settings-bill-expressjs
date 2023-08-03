@@ -22,14 +22,19 @@ app.get("/", function(req, res){
 });
 
 app.post('/settings', function(req, res){
-    settingsBill.setSettings({
-    callCost: req.body.callCost,
-    smsCost: req.body.smsCost,
-    warningLevel: req.body.warningLevel,
-    criticalLevel: req.body.criticalLevel
-  });
-  
- console.log(settingsBill.getTotalClass());
+  //make sure the inputs are not zeros and the warning level is less than the critical
+  if(req.body.callCost == 0 || req.body.smsCost == 0 || req.body.criticalLevel == 0){
+    console.log('Make sure the inputs are in the proper shape and form'); 
+  } 
+  else {
+      settingsBill.setSettings({
+      callCost: req.body.callCost,
+      smsCost: req.body.smsCost,
+      warningLevel: req.body.warningLevel,
+      criticalLevel: req.body.criticalLevel
+    });
+  }
+   
   res.redirect('/');
 });
 
