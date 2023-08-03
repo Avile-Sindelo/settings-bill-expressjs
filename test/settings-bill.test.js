@@ -44,4 +44,33 @@ describe('Testing the factory function of the settings-bill', function(){
         bills.recordAction('call');
         assert.deepEqual(resultTotals, bills.totals());
     });
-})
+
+    it('should test if the correct class name is returned for the grand total', function(){
+        let bills = settingsBill();
+        
+        let settingsObject1 = {
+            smsCost: 1,
+            callCost: 3,
+            warningLevel: 10,
+            criticalLevel: 20
+        }
+
+        bills.setSettings(settingsObject1);
+
+        assert.equal(bills.getTotalClass(), 'totalSettings');
+
+        bills.recordAction('call');
+        bills.recordAction('call');
+        bills.recordAction('call');
+        bills.recordAction('sms');
+
+        assert.equal(bills.getTotalClass(), 'warning');
+
+        bills.recordAction('call');
+        bills.recordAction('call');
+        bills.recordAction('call');
+        bills.recordAction('sms');
+
+        assert.equal(bills.getTotalClass(), 'danger');
+    });
+});
